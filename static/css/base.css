@@ -89,12 +89,24 @@ nav form button{
     margin-left: 69vw;
     margin-top: -30vw;
 }
-#image{
+#image {
     width: 25vw;
     height: 25vw;
     border-radius: 50%;
     border: 0.2vw solid pink;
     box-shadow: 0.4vw 0.9vw 9.4vw rgb(236, 255, 127);
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+/* Zoom on hover */
+#image:hover {
+    transform: scale(1.1);
+}
+
+/* Alternative: Zoom on click (hold) */
+#image:active {
+    transform: scale(1.5);
 }
 #contact{
     text-align: center;
