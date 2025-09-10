@@ -24,4 +24,5 @@ urlpatterns = [
     path('skills/',views.skill_view),
     path('thanks/',views.thank_view),
     path('about/',views.about_view),
+    path('chat/', views.chat_view, name='chat'),
 ]

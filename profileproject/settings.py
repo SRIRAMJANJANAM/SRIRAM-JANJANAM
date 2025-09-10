@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6p26co*ym9@6ywcjq@t6*gu7qi&18m@(4f)0@@5cimmboll7($
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -76,8 +76,10 @@ WSGI_APPLICATION = 'profileproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'portfolio',
+        "USER" : "root",
+        "PASSWORD" : "130423"
     }
 }
 

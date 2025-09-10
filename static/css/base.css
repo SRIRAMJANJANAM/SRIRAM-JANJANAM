@@ -101,7 +101,7 @@ nav form button{
 
 /* Zoom on hover */
 #image:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
 }
 
 /* Alternative: Zoom on click (hold) */
