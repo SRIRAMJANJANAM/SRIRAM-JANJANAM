@@ -8,18 +8,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Contact| Sri Ram Janjanam{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    
 </head>
 <body>
     <div id="contact">
         <h2>Connect <h3>Me</h3></h2>
-    </div> <br>
+    </div>
     <h3 id="slog">Let's Work Together</h3> 
     <div id="ctimg">
-        <a href="https://www.linkedin.com/in/sri-ram-janjanam-0b4a86219/" target="_blank"><img src="{% static 'images/linkedin1.png' %}" id="social1" title="Linkedin"> <br>Linkedin</a>
-        <a href="https://github.com/SRIRAMJANJANAM" target="_blank"> <img src="{% static 'images/git.png' %}" alt="" id="social1" title="github"> <br>GitHub</a>
-        <a href="https://www.youtube.com/@Pythonwebdeveloper_1" target="_blank"> <img src="{% static 'images/yt.png' %}" alt="" id="social1" title="Youtube"> <br>Youtube</a>
-        <a href="mailto:sriramjanjanamram@gmail.com" target="_blank"> <img src="{% static 'images/mail.png' %}" alt="" id="social1" title="Gmail"> <br>Gmail</a>
+        <a href="https://www.linkedin.com/in/sri-ram-janjanam-0b4a86219/" target="_blank">
+            <img src="{% static 'images/linked1.png' %}" id="social1" title="Linkedin">
+            <br>Linkedin
+        </a>
+        <a href="https://github.com/SRIRAMJANJANAM" target="_blank">
+            <img src="{% static 'images/git.png' %}" alt="GitHub" id="social1" title="github">
+            <br>GitHub
+        </a>
+        <a href="https://www.youtube.com/@Pythonwebdeveloper_1" target="_blank">
+            <img src="{% static 'images/yt.png' %}" alt="YouTube" id="social1" title="Youtube">
+            <br>Youtube
+        </a>
+        <a href="mailto:sriramjanjanamram@gmail.com" target="_blank">
+            <img src="{% static 'images/mail.png' %}" alt="Gmail" id="social1" title="Gmail">
+            <br>Gmail
+        </a>
     </div>
     <form method="POST" action="/contact/">
         {% csrf_token %}
@@ -29,25 +40,26 @@
         <label for="email"></label>
         <input type="email" id="email" name="email" required placeholder="Enter Your Email">
     
-        <label for="msg"></label> <br>
-        <textarea id="msg" name="msg" required cols="60" placeholder="Enter Your Message..."></textarea> <br>
+        <label for="msg"></label>
+        <textarea id="msg" name="msg" required placeholder="Enter Your Message..."></textarea>
     
         <button type="submit">Submit</button>
-    </form> <div id="br"></div> 
+    </form>
+    <div id="br"></div>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-  const text = document.getElementById("slog").textContent;
-  const textArray = text.split(""); 
-  document.getElementById("slog").innerHTML = ""; 
-  
-  textArray.forEach((char, index) => {
-    const span = document.createElement("span");
-    span.textContent = char;
-    span.style.animationDelay = `${index * 0.3}s`; 
-    document.getElementById("slog").appendChild(span);
-  });
-});
-
+            const text = document.getElementById("slog").textContent;
+            const textArray = text.split(""); 
+            document.getElementById("slog").innerHTML = ""; 
+            
+            textArray.forEach((char, index) => {
+                const span = document.createElement("span");
+                span.textContent = char;
+                span.style.animationDelay = `${index * 0.1}s`; 
+                document.getElementById("slog").appendChild(span);
+            });
+        });
     </script>
     {% endblock %}
 </body>
