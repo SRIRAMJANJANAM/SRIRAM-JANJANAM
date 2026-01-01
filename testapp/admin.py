@@ -4,3 +4,7 @@ from testapp.models import *
 class ContactAdmin(admin.ModelAdmin):
     list_display=['name','email','msg']
 admin.site.register(Contact,ContactAdmin)
+
+
+admin.site.register(ChatMessage)
+admin.site.register(Experience)

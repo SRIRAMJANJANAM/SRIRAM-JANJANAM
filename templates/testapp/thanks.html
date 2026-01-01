@@ -6,14 +6,648 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Thanks| Sri Ram Janjanam{% endblock %}</title>
+    <title>{% block title %}Thank You | Sri Ram Janjanam{% endblock %}</title>
+    <style>
+        /* ========== Thank You Page Styles ========== */
+        :root {
+            --primary-color: #67d2c8;
+            --secondary-color: #3a0ca3;
+            --accent-color: #00ff0d;
+            --success-color: #10b981;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.16);
+            --border-radius-sm: 10px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Button */
+        .nav-button-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px 0;
+        }
+
+        .prev-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid rgba(67, 97, 238, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .prev-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .prev-button:hover {
+            color: white;
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+
+        .prev-button:hover::before {
+            opacity: 1;
+        }
+
+        .prev-button:hover .button-icon {
+            transform: translateX(-4px);
+        }
+
+        .button-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .thank-you-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Success Card */
+        .success-card {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            padding: 64px 48px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            animation: cardAppear 0.8s ease-out;
+        }
+
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-success);
+        }
+
+        .success-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Success Icon */
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            position: relative;
+            z-index: 1;
+            animation: iconBounce 1s ease infinite alternate;
+        }
+
+        @keyframes iconBounce {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            }
+        }
+
+        .success-icon i {
+            font-size: 48px;
+            color: white;
+        }
+
+        /* Content */
+        .success-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .success-message {
+            font-size: 1.25rem;
+            color: #475569;
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+            
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0 4px;
+        }
+
+        .thank-you-note {
+            font-size: 1.125rem;
+            color: #64748b;
+            font-style: italic;
+            margin: 32px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .heart-icon {
+            color: #ef4444;
+            display: inline-block;
+            animation: heartbeat 1.5s ease infinite;
+            font-size: 1.5em;
+            vertical-align: middle;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+            border-radius: var(--border-radius-lg);
+            padding: 32px;
+            margin-top: 48px;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .steps-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .step-item {
+            background: white;
+            border-radius: var(--border-radius-md);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .step-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 48px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cta-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .cta-secondary:hover {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        /* Animation Classes */
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .thank-you-page {
+                padding: 30px 20px 60px;
+            }
+            
+            .success-card {
+                padding: 48px 24px;
+            }
+            
+            .success-title {
+                font-size: 2.5rem;
+            }
+            
+            .success-message {
+                font-size: 1.125rem;
+            }
+            
+            .success-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .success-icon i {
+                font-size: 36px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-button-container {
+                padding: 15px 20px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .success-title {
+                font-size: 2rem;
+            }
+            
+            .success-message {
+                font-size: 1rem;
+            }
+            
+            .success-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .success-icon i {
+                font-size: 32px;
+            }
+            
+            .cta-button {
+                padding: 14px 24px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0f172a;
+                color: #e2e8f0;
+            }
+            
+            .prev-button {
+                background: #1e293b;
+                color: #60a5fa;
+                border-color: #334155;
+            }
+            
+            .success-card {
+                background: #1e293b;
+                border-color: #334155;
+            }
+            
+            .success-message {
+                color: #cbd5e1;
+            }
+            
+            .thank-you-note {
+                background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+                color: #94a3b8;
+            }
+            
+            .next-steps {
+                background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+                border-color: #334155;
+            }
+            
+            .step-item {
+                background: #1e293b;
+                color: #e2e8f0;
+            }
+            
+            .step-text {
+                color: #cbd5e1;
+            }
+            
+            .cta-secondary {
+                background: #1e293b;
+                color: #60a5fa;
+                border-color: #60a5fa;
+            }
+            
+            .cta-secondary:hover {
+                color: white;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="thank">
-        <h1 id="thanks">
-            Thank you<span id="span">&#128151</span>for contacting<strong>SRI RAM JANJANAM!</strong> You will get reply with in 24hrs, please wait until I respond.........  <br> <br> <br>
-        </h1>
+    <!-- Previous Button Navigation -->
+    <div class="nav-button-container animate-fade-in">
+        <a href="/" class="prev-button">
+            <span class="button-icon">←</span>
+            <span>Back to Home</span>
+        </a>
     </div>
-    {% endblock %}
+
+    <!-- Main Content -->
+    <div class="thank-you-page">
+        <!-- Success Card -->
+        <div class="success-card animate-fade-in">
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+
+            <!-- Success Content -->
+            <div class="success-content">
+                <h1 class="success-title">
+                    Thank You!
+                </h1>
+                
+                <p class="success-message">
+                    Thank you <span class="heart-icon">❤️</span> for contacting 
+                    <span class="highlight">SRI RAM JANJANAM</span>! 
+                    Your message has been received successfully.
+                </p>
+                
+                <div class="thank-you-note">
+                    You will get a reply within 24 hours. Please wait until I respond to your inquiry. 
+                    I appreciate your patience and look forward to connecting with you soon!
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps animate-fade-in" style="animation-delay: 0.2s;">
+                <h3 class="steps-title">
+                    <i class="fas fa-clock"></i> What Happens Next?
+                </h3>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <p class="step-text">
+                            You'll receive an email confirmation of your message
+                        </p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <p class="step-text">
+                            I'll review your message and prepare a personalized response
+                        </p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon">
+                            <i class="fas fa-reply"></i>
+                        </div>
+                        <p class="step-text">
+                            You'll get a detailed reply within 24 hours via email
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Buttons -->
+            <div class="cta-buttons animate-fade-in" style="animation-delay: 0.4s;">
+                <a href="/" class="cta-button cta-primary">
+                    <i class="fas fa-home"></i> Return Home
+                </a>
+                <a href="/contact/" class="cta-button cta-secondary">
+                    <i class="fas fa-envelope"></i> Send Another Message
+                </a>
+                <a href="/about/" class="cta-button cta-secondary">
+                    <i class="fas fa-user"></i> Learn More About Me
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Previous button functionality
+            const prevButton = document.querySelector('.prev-button');
+            if (prevButton) {
+                prevButton.addEventListener('mouseenter', () => {
+                    prevButton.style.transform = 'translateX(-4px)';
+                });
+                
+                prevButton.addEventListener('mouseleave', () => {
+                    prevButton.style.transform = 'translateX(0)';
+                });
+            }
+
+            // Initialize animations
+            const animateElements = document.querySelectorAll('.animate-fade-in');
+            animateElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                el.style.transitionDelay = `${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + index * 100);
+            });
+
+            // Animate heart icon
+            const heartIcon = document.querySelector('.heart-icon');
+            if (heartIcon) {
+                setInterval(() => {
+                    heartIcon.style.animation = 'none';
+                    setTimeout(() => {
+                        heartIcon.style.animation = 'heartbeat 1.5s ease infinite';
+                    }, 10);
+                }, 4500);
+            }
+
+            // Add hover effects to step items
+            const stepItems = document.querySelectorAll('.step-item');
+            stepItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.style.transform = 'translateY(-4px)';
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    item.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add hover effects to CTA buttons
+            const ctaButtons = document.querySelectorAll('.cta-button');
+            ctaButtons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    button.style.transform = 'translateY(-2px)';
+                });
+                
+                button.addEventListener('mouseleave', () => {
+                    button.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+{% endblock %}

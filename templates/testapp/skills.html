@@ -1,44 +1,1184 @@
 <!DOCTYPE html>
-{% extends 'testapp/base.html' %}
 {% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Skills| Sri Ram Janjanam{% endblock %}</title>
+    <title>{% block title %}Technical Skills | Sri Ram Janjanam{% endblock %}</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== Skills Page Styles ========== */
+        :root {
+            /* DARK THEME COLORS - Matching base template */
+            --primary-color: #67d2c8;
+            --secondary-color: #3a0ca3;
+            --accent-color: #00ff0d;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            --gradient-secondary: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #475569;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 4px 12px var(--shadow-color);
+            --shadow-md: 0 8px 24px var(--shadow-color);
+            --shadow-lg: 0 16px 40px var(--shadow-color);
+            --border-radius-sm: 10px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Scroll to Top Button - IMPROVED VISIBILITY */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 6px 30px rgba(103, 210, 200, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            border: none;
+            outline: none;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .scroll-to-top:hover {
+            transform: translateX(-50%) translateY(-8px) scale(1.15);
+            box-shadow: 0 12px 40px rgba(103, 210, 200, 0.4);
+            background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+        }
+
+        .scroll-to-top:active {
+            transform: translateX(-50%) translateY(-4px) scale(1.05);
+        }
+
+        /* Add a subtle pulse animation when button appears */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 6px 30px rgba(103, 210, 200, 0.2);
+            }
+            50% {
+                box-shadow: 0 6px 30px rgba(103, 210, 200, 0.4);
+            }
+            100% {
+                box-shadow: 0 6px 30px rgba(103, 210, 200, 0.2);
+            }
+        }
+
+        .scroll-to-top.show {
+            animation: pulse 2s infinite;
+        }
+
+        /* Navigation Button */
+        .nav-button-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px 0;
+        }
+
+        .prev-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .prev-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .prev-button:hover {
+            color: white;
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+
+        .prev-button:hover::before {
+            opacity: 1;
+        }
+
+        .prev-button:hover .button-icon {
+            transform: translateX(-4px);
+        }
+
+        .button-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .skills-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* Header Section */
+        .skills-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .skills-badge {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .skills-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .skills-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Skills Grid */
+        .skills-category {
+            margin-bottom: 80px;
+        }
+
+        .category-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* Skill Card */
+        .skill-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(216, 211, 211, 0.1) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.4s ease;
+        }
+
+        .skill-card:hover .skill-icon-wrapper {
+            transform: scale(2.1);
+            margin: auto;
+        }
+
+        .skill-icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            transition: all 0.4s ease;
+        }
+
+        .skill-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .skill-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .skill-progress {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+
+        /* 3D Rotation Effect for Main Skills */
+        .rotating-skills {
+            perspective: 1000px;
+            margin: 64px auto;
+            max-width: 1000px;
+        }
+
+        .rotating-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            transform-style: preserve-3d;
+        }
+
+        .rotating-skill {
+            width: 160px;
+            height: 160px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .rotating-skill:hover {
+            transform: rotateY(180deg);
+        }
+
+        .skill-front, .skill-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skill-front {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .skill-back {
+            background: var(--gradient-primary);
+            transform: rotateY(180deg);
+            color: white;
+            text-align: center;
+        }
+
+        .skill-back h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .skill-back p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Development Tools Section */
+        .tools-section {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+            border-radius: var(--border-radius-xl);
+            padding: 64px 48px;
+            margin: 80px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .tools-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1);
+        }
+
+        .tool-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Additional Skills */
+        .additional-skills {
+            margin-top: 80px;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .skill-tag {
+            background: var(--bg-secondary);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .skills-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-button-container {
+                padding: 15px 20px 0;
+            }
+            
+            .prev-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .scroll-to-top {
+                bottom: 30px;
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+            
+            /* Ensure dark theme on mobile */
+            body, .skill-card, .tool-card, .skill-front {
+                background: var(--bg-secondary) !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scroll-to-top {
+                bottom: 25px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.4rem;
+            }
+            
+            .skills-title {
+                font-size: 2rem;
+            }
+            
+            .skill-card {
+                padding: 24px;
+            }
+            
+            .skill-icon-wrapper {
+                width: 64px;
+                height: 64px;
+            }
+            
+            .rotating-skill {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .prev-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Override system preferences to always use dark theme */
+        @media (prefers-color-scheme: light) {
+            :root {
+                /* Keep dark theme colors regardless of system preference */
+                --bg-primary: #0f172a !important;
+                --bg-secondary: #1e293b !important;
+                --bg-tertiary: #334155 !important;
+                --text-primary: #f1f5f9 !important;
+                --text-secondary: #cbd5e1 !important;
+                --text-tertiary: #94a3b8 !important;
+                --border-color: #475569 !important;
+                --shadow-color: rgba(0, 0, 0, 0.3) !important;
+            }
+            
+            body {
+                background: var(--bg-primary) !important;
+                color: var(--text-primary) !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .skills-page {
+                padding: 20px;
+            }
+            
+            .nav-button-container {
+                display: none;
+            }
+            
+            .skill-card,
+            .tool-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .rotating-skills,
+            .animate-float,
+            .scroll-to-top {
+                display: none;
+            }
+        }
+    </style>
 </head>
-{% block body_block%}
 <body>
-    <div id="skill">
-        <h1>My Skills</h1>
+    <!-- Scroll to Top Button - IMPROVED VISIBILITY -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Previous Button Navigation -->
+    <div class="nav-button-container animate-fade-in">
+        <a href="#" class="prev-button" onclick="history.back()">
+            <span class="button-icon">←</span>
+            <span>Go Back</span>
+        </a>
     </div>
-    <div id="subskill">
-        <h5>Technical Skills</h5>
+
+    <!-- Main Content -->
+    <div class="skills-page">
+        <!-- Header -->
+        <header class="skills-header animate-fade-in">
+            <div class="skills-badge animate-fade-in" style="animation-delay: 0.2s;">
+                <i class="fas fa-code"></i> Technical Expertise
+            </div>
+            <h1 class="skills-title animate-fade-in" style="animation-delay: 0.3s;">
+                My Technical Skills
+            </h1>
+            <p class="skills-subtitle animate-fade-in" style="animation-delay: 0.4s;">
+                A comprehensive showcase of my technical skills and expertise in modern web development
+            </p>
+        </header>
+
+        <!-- Core Technologies Grid -->
+        <section class="skills-category animate-fade-in" style="animation-delay: 0.5s;">
+            <h2 class="category-title">
+                <i class="fas fa-cogs"></i> Core Technologies
+            </h2>
+            
+            <div class="skills-grid">
+                <!-- HTML -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/html.jpg' %}" alt="HTML5" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">HTML5</h3>
+                    <p class="skill-description">
+                        Semantic markup, accessibility standards, and modern HTML5 APIs for building structured web applications.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Expert Level</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSS -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/css.jpg' %}" alt="CSS3" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">CSS3</h3>
+                    <p class="skill-description">
+                        Advanced styling with Flexbox, Grid, animations, and responsive design principles.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Advanced</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/js.png' %}" alt="JavaScript" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">JavaScript</h3>
+                    <p class="skill-description">
+                        ES6+, DOM manipulation, async programming, and modern JavaScript frameworks.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Advanced</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/python.png' %}" alt="Python" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">Python</h3>
+                    <p class="skill-description">
+                        Backend development, data processing, and building scalable web applications.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Expert Level</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 88%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Django -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/jango.png' %}" alt="Django" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">Django</h3>
+                    <p class="skill-description">
+                        Full-stack web framework with ORM, authentication, and REST API development.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Expert Level</span>
+                            <span>92%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MySQL -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/sql1.png' %}" alt="MySQL" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">MySQL</h3>
+                    <p class="skill-description">
+                        Database design, query optimization, and efficient data management.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Proficient</span>
+                            <span>82%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bootstrap -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/boot.jpg' %}" alt="Bootstrap" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">Bootstrap</h3>
+                    <p class="skill-description">
+                        Responsive design framework for rapid prototyping and consistent UI development.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Advanced</span>
+                            <span>87%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REST API -->
+                <div class="skill-card">
+                    <div class="skill-icon-wrapper">
+                        <img src="{% static 'images/rest1.png' %}" alt="REST API" class="skill-icon" loading="lazy">
+                    </div>
+                    <h3 class="skill-name">REST API</h3>
+                    <p class="skill-description">
+                        Designing and developing RESTful APIs with Django REST Framework.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="progress-label">
+                            <span>Advanced</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Rotating Skills Display -->
+        <section class="rotating-skills animate-fade-in" style="animation-delay: 0.6s;">
+            <h2 class="category-title" style="justify-content: center; text-align: center;">
+                <i class="fas fa-sync-alt"></i> Interactive Skills 
+            </h2>
+            
+            <div class="rotating-container">
+                <div class="rotating-skill animate-float" style="animation-delay: 0.1s;">
+                    <div class="skill-front">
+                        <img src="{% static 'images/html.jpg' %}" alt="HTML" class="skill-icon">
+                        <h4>HTML5</h4>
+                    </div>
+                    <div class="skill-back">
+                        <h4>HTML5</h4>
+                        <p>Semantic Markup</p>
+                        <p>Accessibility</p>
+                        <p>Modern APIs</p>
+                    </div>
+                </div>
+                
+                <div class="rotating-skill animate-float" style="animation-delay: 0.2s;">
+                    <div class="skill-front">
+                        <img src="{% static 'images/css.jpg' %}" alt="CSS" class="skill-icon">
+                        <h4>CSS3</h4>
+                    </div>
+                    <div class="skill-back">
+                        <h4>CSS3</h4>
+                        <p>Flexbox & Grid</p>
+                        <p>Animations</p>
+                        <p>Responsive Design</p>
+                    </div>
+                </div>
+                
+                <div class="rotating-skill animate-float" style="animation-delay: 0.3s;">
+                    <div class="skill-front">
+                        <img src="{% static 'images/js.png' %}" alt="JavaScript" class="skill-icon">
+                        <h4>JavaScript</h4>
+                    </div>
+                    <div class="skill-back">
+                        <h4>JavaScript</h4>
+                        <p>ES6+</p>
+                        <p>DOM Manipulation</p>
+                        <p>Async Programming</p>
+                    </div>
+                </div>
+                
+                <div class="rotating-skill animate-float" style="animation-delay: 0.4s;">
+                    <div class="skill-front">
+                        <img src="{% static 'images/python.png' %}" alt="Python" class="skill-icon">
+                        <h4>Python</h4>
+                    </div>
+                    <div class="skill-back">
+                        <h4>Python</h4>
+                        <p>Backend Dev</p>
+                        <p>Data Processing</p>
+                        <p>Web Scraping</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Development Tools Section -->
+        <section class="tools-section animate-fade-in" style="animation-delay: 0.7s;">
+            <h2 class="section-title">
+                Development Tools & Version Control
+            </h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <img src="{% static 'images/git1.png' %}" alt="Git" class="tool-icon">
+                    <h3 class="tool-name">Git</h3>
+                    <p class="tool-description">
+                        Distributed version control system for tracking changes and collaborative development.
+                    </p>
+                </div>
+                
+                <div class="tool-card">
+                    <img src="{% static 'images/git.png' %}" alt="GitHub" class="tool-icon">
+                    <h3 class="tool-name">GitHub</h3>
+                    <p class="tool-description">
+                        Code hosting platform for version control, collaboration, and CI/CD pipelines.
+                    </p>
+                </div>
+                
+                <div class="tool-card">
+                    <img src="{% static 'images/vscode.png' %}" alt="VS Code" class="tool-icon">
+                    <h3 class="tool-name">VS Code</h3>
+                    <p class="tool-description">
+                        Lightweight, powerful code editor with extensive extensions and debugging tools.
+                    </p>
+                </div>
+                
+                <div class="tool-card">
+                    <img src="{% static 'images/postman.png' %}" alt="Postman" class="tool-icon">
+                    <h3 class="tool-name">Postman</h3>
+                    <p class="tool-description">
+                        API development and testing platform for building and documenting REST APIs.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Skills -->
+        <section class="additional-skills animate-fade-in" style="animation-delay: 0.8s;">
+            <h2 class="category-title" style="justify-content: center; text-align: center;">
+                <i class="fas fa-plus-circle"></i> Additional Skills
+            </h2>
+            
+            <div class="skills-tags">
+                <span class="skill-tag">Responsive Design</span>
+                <span class="skill-tag">Web Accessibility</span>
+                <span class="skill-tag">Performance Optimization</span>
+                <span class="skill-tag">Cross-browser Compatibility</span>
+                <span class="skill-tag">API Design</span>
+                <span class="skill-tag">Database Optimization</span>
+                <span class="skill-tag">Testing & Debugging</span>
+                <span class="skill-tag">Problem Solving</span>
+                <span class="skill-tag">Team Collaboration</span>
+                <span class="skill-tag">Documentation</span>
+                <span class="skill-tag">SEO Optimization</span>
+                <span class="skill-tag">Web Performance</span>
+            </div>
+        </section>
     </div>
-    <div id="body">
-        <div class="box">
-            <span style="--i: 1" id="span1"><img src="{% static 'images/html.jpg' %}" alt="HTML" id="img2" title="HTML"><h1 title="HTML">HTML</h1></span>
-            <span style="--i: 2" id="span1"><img src="{% static 'images/css.jpg' %}" alt="CSS" id="img2" title="CSS"><h1>CSS</h1></span>
-            <span style="--i: 3" id="span1"><img src="{% static 'images/js.png' %}" alt="JavaScript" id="img2" title="JavaScript"><h1>JavaScript</h1></span>
-            <span style="--i: 4" id="span1"><img src="{% static 'images/python.png' %}" alt="Python" id="img2" title="Python"><h1>Python</h1></span>
-            <span style="--i: 5" id="span1"><img src="{% static 'images/jango.png' %}" alt="Django" id="img2" title="Django"><h1>Django</h1></span>
-            <span style="--i: 6" id="span1"><img src="{% static 'images/sql1.png' %}" alt="MySQL" id="img2" title="Mysql"><h1>Mysql</h1></span>
-            <span style="--i: 7" id="span1"><img src="{% static 'images/boot.jpg' %}" alt="Bootstrap" id="img2" title="Bootstrap"><h1>Bootstrap</h1></span>
-            <span style="--i: 8" id="span1"><img src="{% static 'images/rest1.png' %}" alt="REST API" id="img2" title="Restapi"><h1>Restapi</h1></span>
-         </div>
-    </div>
-    <div id="develop">
-        <h1>Development Tools & Version Control</h1>
-        <h2><img src="{% static 'images/git1.png' %}" alt="Git">
-            <strong>Git</strong>
-        </h2>
-        <h2><img src="{% static 'images/git.png' %}" alt="GitHub">
-            <strong>GitHub</strong>
-        </h2>
-        <h2><img src="{% static 'images/vscode.png' %}" alt="VS Code">
-            <strong>Vscode</strong>
-        </h2>
-    </div>
-    {% endblock %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress bars on scroll
+            const progressBars = document.querySelectorAll('.progress-fill');
+            const skillCards = document.querySelectorAll('.skill-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate skill card
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        
+                        // Animate progress bar
+                        const progressBar = entry.target.querySelector('.progress-fill');
+                        if (progressBar) {
+                            const width = progressBar.style.width;
+                            progressBar.style.width = '0';
+                            setTimeout(() => {
+                                progressBar.style.width = width;
+                            }, 300);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.2,
+                rootMargin: '0px 0px -100px 0px'
+            });
+            
+            skillCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+            
+            // Rotating skills interaction
+            const rotatingSkills = document.querySelectorAll('.rotating-skill');
+            rotatingSkills.forEach(skill => {
+                skill.addEventListener('mouseenter', () => {
+                    skill.style.transform = 'rotateY(180deg) scale(1.05)';
+                });
+                
+                skill.addEventListener('mouseleave', () => {
+                    skill.style.transform = 'rotateY(0deg) scale(1)';
+                });
+                
+                // Touch support for mobile
+                skill.addEventListener('touchstart', () => {
+                    skill.classList.toggle('rotated');
+                    if (skill.classList.contains('rotated')) {
+                        skill.style.transform = 'rotateY(180deg) scale(1.05)';
+                    } else {
+                        skill.style.transform = 'rotateY(0deg) scale(1)';
+                    }
+                });
+            });
+            
+            // Tool card hover effects
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-4px)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Skill tag hover effects
+            const skillTags = document.querySelectorAll('.skill-tag');
+            skillTags.forEach(tag => {
+                tag.addEventListener('mouseenter', () => {
+                    tag.style.transform = 'translateY(-2px)';
+                });
+                
+                tag.addEventListener('mouseleave', () => {
+                    tag.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Previous button hover effect
+            const prevButton = document.querySelector('.prev-button');
+            if (prevButton) {
+                prevButton.addEventListener('mouseenter', () => {
+                    prevButton.style.transform = 'translateX(-4px)';
+                });
+                
+                prevButton.addEventListener('mouseleave', () => {
+                    prevButton.style.transform = 'translateX(0)';
+                });
+            }
+            
+            // Initialize animations for all animate-fade-in elements
+            const animateElements = document.querySelectorAll('.animate-fade-in');
+            animateElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                el.style.transitionDelay = `${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + index * 100);
+            });
+            
+            // Add floating animation to rotating skills
+            const floatingSkills = document.querySelectorAll('.animate-float');
+            floatingSkills.forEach((skill, index) => {
+                skill.style.animationDelay = `${index * 0.1 + 0.5}s`;
+            });
+            
+            // Add smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Optional: Custom back button functionality
+            prevButton.addEventListener('click', function(e) {
+                // You can customize this to go to a specific page
+                // For now, it uses browser history
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    // Fallback to home page if no history
+                    window.location.href = '/';
+                }
+            });
+            
+            // Scroll to Top functionality - IMPROVED
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.classList.add('show');
+                } else {
+                    scrollToTopBtn.classList.remove('show');
+                }
+            });
+            
+            // Scroll to top when button is clicked
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Keyboard accessibility
+            scrollToTopBtn.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            
+            // Add click animation
+            scrollToTopBtn.addEventListener('click', function() {
+                this.style.transform = 'translateX(-50%) scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(-50%) translateY(0)';
+                }, 150);
+            });
+
+            // Ensure dark theme is applied on page load
+            document.body.style.backgroundColor = 'var(--bg-primary)';
+            document.body.style.color = 'var(--text-primary)';
+        });
+    </script>
 </body>
 </html>

@@ -5,62 +5,996 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Contact| Sri Ram Janjanam{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Contact | Sri Ram Janjanam{% endblock %}</title>
+    <style>
+        /* ========== Contact Page Styles ========== */
+        :root {
+            --primary-color: #67d2c8;
+            --secondary-color: #3a0ca3;
+            --accent-color: #00ff0d;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            --gradient-secondary: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.16);
+            --border-radius-sm: 10px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+            
+            /* Dark Theme Variables */
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --text-dark: #e2e8f0;
+            --text-secondary-dark: #94a3b8;
+            --border-dark: #334155;
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Default Light Theme */
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* Navigation Button */
+        .nav-button-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px 0;
+        }
+
+        .prev-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid rgba(67, 97, 238, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .prev-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .prev-button:hover {
+            color: white;
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+
+        .prev-button:hover::before {
+            opacity: 1;
+        }
+
+        .prev-button:hover .button-icon {
+            transform: translateX(-4px);
+        }
+
+        .button-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .contact-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            width: 100%;
+        }
+
+        /* Header Section */
+        .contact-header {
+            text-align: center;
+            margin-bottom: 64px;
+            width: 100%;
+        }
+
+        .contact-badge {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        .contact-title h3 {
+            display: inline-block;
+            color: var(--accent-color);
+            -webkit-text-fill-color: var(--accent-color);
+            font-size: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contact-subtitle {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+            line-height: 1.5;
+        }
+
+        /* Two Column Layout */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            margin-bottom: 80px;
+            width: 100%;
+        }
+
+        /* Social Links Section */
+        .social-section {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+            border-radius: var(--border-radius-xl);
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .social-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 32px;
+            position: relative;
+            text-align: center;
+            word-wrap: break-word;
+            transition: color 0.3s ease;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .social-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: clamp(20px, 3vw, 32px) clamp(16px, 2vw, 24px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+            min-height: 180px;
+        }
+
+        .social-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .social-icon {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-card:hover .social-icon {
+            transform: scale(1.1);
+        }
+
+        .social-name {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            word-wrap: break-word;
+            transition: color 0.3s ease;
+        }
+
+        .social-description {
+            color: #64748b;
+            font-size: clamp(0.8rem, 1.5vw, 0.85rem);
+            line-height: 1.5;
+            word-wrap: break-word;
+            transition: color 0.3s ease;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            padding: clamp(32px, 4vw, 48px);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .form-title {
+            font-size: clamp(1.5rem, 3vw, 1.75rem);
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            word-wrap: break-word;
+            transition: color 0.3s ease;
+        }
+
+        .form-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .form-group {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #475569;
+            font-size: clamp(0.9rem, 1.5vw, 0.95rem);
+            transition: color 0.3s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: clamp(14px, 2vw, 16px) clamp(16px, 2vw, 20px);
+            border: 2px solid #e2e8f0;
+            border-radius: var(--border-radius-md);
+            font-size: clamp(0.95rem, 1.5vw, 1rem);
+            transition: all 0.3s ease;
+            background: white;
+            color: #1e293b;
+            font-family: inherit;
+            max-width: 100%;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.5;
+            max-width: 100%;
+        }
+
+        .submit-button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: clamp(16px, 2vw, 18px) clamp(24px, 3vw, 32px);
+            border-radius: var(--border-radius-md);
+            font-size: clamp(1rem, 1.5vw, 1.1rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .submit-button:hover .submit-icon {
+            transform: translateX(4px);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border: 2px solid #10b981;
+            color: #065f46;
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            margin-top: 24px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        /* Animated Text */
+        .animated-text {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin: clamp(32px, 5vw, 48px) 0;
+            width: 100%;
+            word-wrap: break-word;
+            padding: 0 15px;
+        }
+
+        .animated-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.5s ease forwards;
+            white-space: normal;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        /* ========== DARK THEME FOR MOBILE ========== */
+        @media (max-width: 768px) {
+            body {
+                background: var(--bg-dark) !important;
+                color: var(--text-dark) !important;
+            }
+            
+            /* Navigation Button */
+            .prev-button {
+                background: var(--card-dark) !important;
+                color: #60a5fa !important;
+                border-color: var(--border-dark) !important;
+                box-shadow: 0 4px 12px var(--shadow-dark) !important;
+            }
+            
+            .prev-button:hover {
+                color: white !important;
+            }
+            
+            /* Header */
+            .contact-subtitle {
+                color: var(--text-secondary-dark) !important;
+            }
+            
+            /* Social Section */
+            .social-section {
+                background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%) !important;
+            }
+            
+            .section-title {
+                color: var(--text-dark) !important;
+            }
+            
+            /* Social Cards */
+            .social-card {
+                background: var(--card-dark) !important;
+                border-color: var(--border-dark) !important;
+                box-shadow: 0 4px 12px var(--shadow-dark) !important;
+            }
+            
+            .social-name {
+                color: var(--text-dark) !important;
+            }
+            
+            .social-description {
+                color: var(--text-secondary-dark) !important;
+            }
+            
+            /* Form Section */
+            .form-section {
+                background: var(--card-dark) !important;
+                border-color: var(--border-dark) !important;
+                box-shadow: 0 8px 24px var(--shadow-dark) !important;
+            }
+            
+            .form-title {
+                color: var(--text-dark) !important;
+            }
+            
+            .form-label {
+                color: var(--text-secondary-dark) !important;
+            }
+            
+            .form-input {
+                background: rgba(30, 41, 59, 0.5) !important;
+                border-color: var(--border-dark) !important;
+                color: var(--text-dark) !important;
+            }
+            
+            .form-input:focus {
+                border-color: var(--primary-color) !important;
+                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2) !important;
+            }
+            
+            .form-input::placeholder {
+                color: #64748b !important;
+            }
+            
+            /* Animated Text */
+            .animated-text {
+                color: #60a5fa !important;
+            }
+            
+            /* Success Message */
+            .success-message {
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%) !important;
+                border-color: #10b981 !important;
+                color: #a7f3d0 !important;
+            }
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        /* For tablets and smaller screens */
+        @media (max-width: 1024px) {
+            .contact-container {
+                gap: 40px;
+            }
+            
+            .social-section,
+            .form-section {
+                padding: clamp(24px, 3vw, 32px);
+            }
+        }
+
+        /* For mobile devices */
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                margin-bottom: 60px;
+            }
+            
+            .contact-page {
+                padding: 20px 16px 60px;
+            }
+            
+            .contact-header {
+                margin-bottom: 40px;
+            }
+            
+            .nav-button-container {
+                padding: 15px 16px 0;
+            }
+            
+            .prev-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                width: auto;
+            }
+            
+            .social-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            
+            .social-card {
+                min-height: 160px;
+                padding: 20px 16px;
+            }
+            
+            .animated-text {
+                margin: 32px 0;
+            }
+        }
+
+        /* For small mobile devices */
+        @media (max-width: 480px) {
+            .contact-container {
+                gap: 32px;
+            }
+            
+            .contact-title {
+                font-size: 2rem;
+                padding: 0 10px;
+            }
+            
+            .contact-badge {
+                padding: 6px 20px;
+                font-size: 12px;
+            }
+            
+            .social-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .social-card {
+                min-height: auto;
+                padding: 24px 20px;
+            }
+            
+            .section-title,
+            .form-title {
+                font-size: 1.5rem;
+                margin-bottom: 24px;
+            }
+            
+            .form-section {
+                padding: 24px 20px;
+            }
+            
+            .form-input {
+                padding: 14px 16px;
+            }
+            
+            .submit-button {
+                padding: 16px 24px;
+                font-size: 1rem;
+            }
+            
+            .prev-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            
+            .contact-subtitle {
+                font-size: 0.95rem;
+                padding: 0 10px;
+            }
+            
+            .animated-text {
+                font-size: 1.5rem;
+                padding: 0 10px;
+            }
+        }
+
+        /* For very small screens (under 360px) */
+        @media (max-width: 360px) {
+            .contact-page {
+                padding: 15px 12px 50px;
+            }
+            
+            .contact-title {
+                font-size: 1.75rem;
+            }
+            
+            .social-section,
+            .form-section {
+                padding: 20px 16px;
+            }
+            
+            .social-card {
+                padding: 20px 16px;
+            }
+            
+            .form-input {
+                padding: 12px 14px;
+            }
+            
+            .submit-button {
+                padding: 14px 20px;
+            }
+        }
+
+        /* Optional: System Dark Mode Support (Desktop) */
+        @media (min-width: 769px) and (prefers-color-scheme: dark) {
+            body {
+                background: var(--bg-dark);
+                color: var(--text-dark);
+            }
+            
+            .prev-button {
+                background: var(--card-dark);
+                color: #60a5fa;
+                border-color: var(--border-dark);
+            }
+            
+            .prev-button:hover {
+                color: white;
+            }
+            
+            .social-card,
+            .form-section {
+                background: var(--card-dark);
+                border-color: var(--border-dark);
+            }
+            
+            .form-title,
+            .section-title,
+            .social-name {
+                color: var(--text-dark);
+            }
+            
+            .social-description,
+            .contact-subtitle {
+                color: var(--text-secondary-dark);
+            }
+            
+            .form-input {
+                background: var(--card-dark);
+                border-color: var(--border-dark);
+                color: var(--text-dark);
+            }
+            
+            .form-input:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            }
+            
+            .social-section {
+                background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+            }
+            
+            .animated-text {
+                color: #60a5fa;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-button-container {
+                display: none;
+            }
+            
+            .contact-page {
+                padding: 20px;
+            }
+            
+            .social-card,
+            .form-section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .submit-button {
+                background: #ddd;
+                color: #000;
+            }
+        }
+
+        /* Prevent horizontal scrolling */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
+        /* Smooth transitions */
+        .social-card,
+        .form-section,
+        .form-input,
+        .prev-button {
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
 <body>
-    <div id="contact">
-        <h2>Connect <h3>Me</h3></h2>
-    </div>
-    <h3 id="slog">Let's Work Together</h3> 
-    <div id="ctimg">
-        <a href="https://www.linkedin.com/in/sri-ram-janjanam-0b4a86219/" target="_blank">
-            <img src="{% static 'images/linked1.png' %}" id="social1" title="Linkedin">
-            <br>Linkedin
-        </a>
-        <a href="https://github.com/SRIRAMJANJANAM" target="_blank">
-            <img src="{% static 'images/git.png' %}" alt="GitHub" id="social1" title="github">
-            <br>GitHub
-        </a>
-        <a href="https://www.youtube.com/@Pythonwebdeveloper_1" target="_blank">
-            <img src="{% static 'images/yt.png' %}" alt="YouTube" id="social1" title="Youtube">
-            <br>Youtube
-        </a>
-        <a href="mailto:sriramjanjanamram@gmail.com" target="_blank">
-            <img src="{% static 'images/mail.png' %}" alt="Gmail" id="social1" title="Gmail">
-            <br>Gmail
+    <!-- Previous Button Navigation -->
+    <div class="nav-button-container animate-fade-in">
+        <a href="javascript:history.back()" class="prev-button">
+            <span class="button-icon">←</span>
+            <span>Go Back</span>
         </a>
     </div>
-    <form method="POST" action="/contact/">
-        {% csrf_token %}
-        <label for="name"></label>
-        <input type="text" id="name" name="name" required placeholder="Enter Your Name">
-    
-        <label for="email"></label>
-        <input type="email" id="email" name="email" required placeholder="Enter Your Email">
-    
-        <label for="msg"></label>
-        <textarea id="msg" name="msg" required placeholder="Enter Your Message..."></textarea>
-    
-        <button type="submit">Submit</button>
-    </form>
-    <div id="br"></div>
-    
+
+    <!-- Main Content -->
+    <div class="contact-page">
+        <!-- Header -->
+        <header class="contact-header animate-fade-in">
+            <div class="contact-badge animate-fade-in" style="animation-delay: 0.2s;">
+                <i class="fas fa-envelope"></i> Get In Touch
+            </div>
+            <h1 class="contact-title animate-fade-in" style="animation-delay: 0.3s;">
+                Connect <h3>Me</h3>
+            </h1>
+            <p class="contact-subtitle animate-fade-in" style="animation-delay: 0.4s;">
+                Let's collaborate and bring your ideas to life. Feel free to reach out through any platform.
+            </p>
+        </header>
+
+        <!-- Animated Slogan -->
+        <div class="animated-text animate-fade-in" style="animation-delay: 0.5s;" id="slog">
+            Let's Work Together
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="contact-container">
+            <!-- Social Links -->
+            <section class="social-section animate-fade-in" style="animation-delay: 0.6s;">
+                <h2 class="section-title">
+                    Connect With Me
+                </h2>
+                <div class="social-grid">
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/sri-ram-janjanam-0b4a86219/" target="_blank" class="social-card" title="LinkedIn">
+                        <i class="fab fa-linkedin social-icon" style="color: #0077B5;"></i>
+                        <h3 class="social-name">LinkedIn</h3>
+                        <p class="social-description">Professional networking and updates</p>
+                    </a>
+
+                    <!-- GitHub -->
+                    <a href="https://github.com/SRIRAMJANJANAM" target="_blank" class="social-card" title="GitHub">
+                        <i class="fab fa-github social-icon" style="color: #ffffff;"></i>
+                        <h3 class="social-name">GitHub</h3>
+                        <p class="social-description">Code repositories and projects</p>
+                    </a>
+
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@Pythonwebdeveloper_1" target="_blank" class="social-card" title="YouTube">
+                        <i class="fab fa-youtube social-icon" style="color: #FF0000;"></i>
+                        <h3 class="social-name">YouTube</h3>
+                        <p class="social-description">Tutorials and tech content</p>
+                    </a>
+
+                    <!-- Gmail -->
+                    <a href="mailto:sriramjanjanam13@gmail.com" class="social-card" title="Gmail">
+                        <i class="fa-solid fa-envelope-circle-check social-icon" style="color: #D44638;"></i>
+                        <h3 class="social-name">Email</h3>
+                        <p class="social-description">Direct email communication</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contact Form -->
+            <section class="form-section animate-fade-in" style="animation-delay: 0.7s;">
+                <h2 class="form-title">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </h2>
+                <form method="POST" action="/contact/" class="contact-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" required placeholder="Enter your email address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="msg" class="form-label">Your Message</label>
+                        <textarea id="msg" name="msg" class="form-input" required placeholder="Tell me about your project or inquiry..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span>Send Message</span>
+                        <i class="fas fa-paper-plane submit-icon"></i>
+                    </button>
+
+                    <!-- Success Message (Can be shown with JavaScript) -->
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                        <span>Your message has been sent successfully!</span>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const text = document.getElementById("slog").textContent;
-            const textArray = text.split(""); 
-            document.getElementById("slog").innerHTML = ""; 
-            
-            textArray.forEach((char, index) => {
-                const span = document.createElement("span");
-                span.textContent = char;
-                span.style.animationDelay = `${index * 0.1}s`; 
-                document.getElementById("slog").appendChild(span);
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Detect mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 768;
+        
+        // Apply dark theme immediately for mobile
+        if (isMobile || isSmallScreen) {
+            document.body.classList.add('mobile-dark-theme');
+        }
+        
+        // Animated text effect
+        const text = document.getElementById("slog").textContent;
+        const textArray = text.split(""); 
+        document.getElementById("slog").innerHTML = ""; 
+        
+        textArray.forEach((char, index) => {
+            const span = document.createElement("span");
+            span.textContent = char === " " ? "\u00A0" : char;
+            span.style.animationDelay = `${index * 0.1}s`; 
+            document.getElementById("slog").appendChild(span);
         });
-    </script>
-    {% endblock %}
+
+        // Form submission
+        const contactForm = document.querySelector('.contact-form');
+        const submitButton = document.querySelector('.submit-button');
+        const successMessage = document.getElementById('successMessage');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                // Show loading state
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Sending...</span>';
+                submitButton.disabled = true;
+                
+                // Reset button after 3 seconds if submission fails
+                setTimeout(() => {
+                    submitButton.innerHTML = '<span>Send Message</span><i class="fas fa-paper-plane submit-icon"></i>';
+                    submitButton.disabled = false;
+                }, 3000);
+            });
+        }
+
+        // Check if form was submitted successfully
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            if (successMessage) {
+                successMessage.style.display = 'flex';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Initialize animations
+        const animateElements = document.querySelectorAll('.animate-fade-in');
+        animateElements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            el.style.transitionDelay = `${index * 0.1}s`;
+            
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 100 + index * 100);
+        });
+
+        // Prevent zoom on mobile double-tap
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Handle screen resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                document.body.classList.add('mobile-dark-theme');
+            } else {
+                document.body.classList.remove('mobile-dark-theme');
+            }
+        });
+        
+        // Update GitHub icon color for dark mode
+        function updateGitHubIcon() {
+            const githubIcon = document.querySelector('.fa-github');
+            if (githubIcon && (isMobile || isSmallScreen || window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                githubIcon.style.color = '#ffffff';
+            } else if (githubIcon) {
+                githubIcon.style.color = '#000000';
+            }
+        }
+        
+        updateGitHubIcon();
+    });
+</script>
+
 </body>
 </html>
+{% endblock %}

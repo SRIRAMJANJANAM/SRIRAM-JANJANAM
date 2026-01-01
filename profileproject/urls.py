@@ -25,4 +25,15 @@ urlpatterns = [
     path('thanks/',views.thank_view),
     path('about/',views.about_view),
     path('chat/', views.chat_view, name='chat'),
+    path('experiences/', views.experience_view, name='experiences'),
+
+    path('chat/clear/', views.chat_clear_session, name='chat_clear'),
+    path('chat/status/', views.chat_status, name='chat_status'),
+    
+    path('api/experiences/', views.experience_list_api, name='experience-list'),
+    path('api/experiences/<int:experience_id>/', views.experience_detail_api, name='experience-detail'),
+    path('api/experiences/bulk/', views.experience_bulk_api, name='experience-bulk'),
+    path('api/experiences/search/', views.experience_search_api, name='experience-search'),
+    path('api/experiences/stats/', views.experience_stats_api, name='experience-stats'),
+    path('api/experiences/export/', views.experience_export_api, name='experience-export'),
 ]
