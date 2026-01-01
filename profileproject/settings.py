@@ -23,9 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6p26co*ym9@6ywcjq@t6*gu7qi&18m@(4f)0@@5cimmboll7($'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['sriramjanjanam.pythonanywhere.com']
+
 
 
 # Application definition
@@ -76,12 +78,11 @@ WSGI_APPLICATION = 'profileproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'portfolio',
-        "USER" : "root",
-        "PASSWORD" : "130423"
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 
 # Password validation
@@ -119,7 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS =[BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -141,4 +142,4 @@ DEFAULT_FROM_EMAIL = 'sriramjanjanam13@gmail.com'
 
 
 
-CSRF_TRUSTED_ORIGINS = ['https://f57e54d61fe8.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://sriramjanjanam.pythonanywhere.com']
